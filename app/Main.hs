@@ -1,6 +1,8 @@
 module Main where
 
-import Lib
+import Control.Effect (runM)
+import TeletypeEffect (runTeletypeIO)
+import Echo (echo)
 
 main :: IO ()
-main = someFunc
+main = runM $ runTeletypeIO echo

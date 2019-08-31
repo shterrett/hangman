@@ -19,8 +19,25 @@ extra-source-files:
 # common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/shterrett/hangman#readme>
 
+default-extensions:
+  - BlockArguments
+  - DeriveAnyClass
+  - DeriveFunctor
+  - DeriveGeneric
+  - DerivingVia
+  - FlexibleContexts
+  - FlexibleInstances
+  - KindSignatures
+  - LambdaCase
+  - MultiParamTypeClasses
+  - OverloadedStrings
+  - TypeOperators
+  - UndecidableInstances
+
 dependencies:
 - base >= 4.7 && < 5
+- fused-effects == 0.5.0.0
+- text
 
 library:
   source-dirs: src
@@ -33,6 +50,8 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -Wall
+    - -Werror
     dependencies:
     - hangman
 
