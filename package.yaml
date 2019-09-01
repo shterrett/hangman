@@ -31,11 +31,13 @@ default-extensions:
   - LambdaCase
   - MultiParamTypeClasses
   - OverloadedStrings
+  - ScopedTypeVariables
   - TypeOperators
   - UndecidableInstances
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 - fused-effects == 0.5.0.0
 - random
 - text
