@@ -2,7 +2,8 @@ module Main where
 
 import Control.Effect (runM)
 import TeletypeEffect (runTeletypeIO)
-import Echo (echo)
+import WordsEffect (runWordsIO)
+import Echo (echoWord)
 
 main :: IO ()
-main = runM $ runTeletypeIO echo
+main = runM $ runTeletypeIO . runWordsIO $ echoWord
