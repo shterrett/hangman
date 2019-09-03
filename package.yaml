@@ -32,6 +32,7 @@ default-extensions:
   - MultiParamTypeClasses
   - OverloadedStrings
   - ScopedTypeVariables
+  - TemplateHaskell
   - TypeOperators
   - UndecidableInstances
 
@@ -39,6 +40,7 @@ dependencies:
 - base >= 4.7 && < 5
 - containers
 - fused-effects == 0.5.0.0
+- lens
 - random
 - text
 
