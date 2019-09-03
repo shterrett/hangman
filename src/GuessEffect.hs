@@ -3,23 +3,40 @@ module GuessEffect where
 import qualified Data.Set as Set
 import Control.Effect
 import Control.Effect.State
-import Control.Lens ((^.), (%~))
+import Control.Lens ((^.), (.~), (%~))
+import Data.Text (Text)
+import qualified Data.Text as T
 import GameState
+import Text.Read (readMaybe)
 
 guess :: (Member (State GameState) sig, Carrier sig m)
-         => Char
+         => Text
          -> m GuessResult
-guess c = do
+guess s = do
     game :: GameState <- get
-    case alreadyGuessed game c >>= checkGuess game of
-      Right c' ->
-        put $ insertChar game c' correctGuesses
-      Left (Incorrect c') ->
-        put $ insertChar game c' incorrectGuesses
-      Left (AlreadyGuessed _) -> pure ()
+    put $ clearError game
+    case isChar s
+         >>= alreadyGuessed game
+         >>= checkGuess game of
+      Right c ->
+        put $ insertChar c correctGuesses game
+      Left (Incorrect c) ->
+        put $ insertChar c incorrectGuesses game
+      Left (AlreadyGuessed c) ->
+        put $ updateError ((T.pack $ show c) <> " already guessed") game
+      Left NotChar ->
+        put $ updateError "Guess must be a single character" game
     pure $ fromEither $ loseGame game >>= winGame
   where fromEither = either id id
-        insertChar g ch l = (l %~ (Set.insert ch)) g
+        insertChar c l = (l %~ (Set.insert c))
+        updateError msg = (errorMsg .~ (Just $ msg))
+        clearError = (errorMsg .~ Nothing)
+
+isChar :: Text -> Either GuessError Char
+isChar = toEither . readMaybe . T.unpack
+  where toEither = \case
+                     Nothing -> Left $ NotChar
+                     Just c -> Right c
 
 alreadyGuessed :: GameState -> Char -> Either GuessError Char
 alreadyGuessed g c =
