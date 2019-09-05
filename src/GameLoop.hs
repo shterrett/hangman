@@ -15,7 +15,6 @@ import WordsEffect
 
 gameLoop :: ( Carrier sig m
             , Effect sig
-            , Member (State GameState) sig
             , Member TeletypeE sig
             , Member WordsE sig
             ) => m ()
@@ -29,8 +28,7 @@ gameLoop = do
                          , _incorrectGuesses = Set.empty
                          , _errorMsg = Nothing
                          }
-    result <- iterateUntil (/= Continue)
-                           (evalState game gameStep)
+    result <- evalState game $ iterateUntil (/= Continue) gameStep
     case result of
       Continue -> writeLine "Error: game ended unexpectedly"
       Win -> writeLine "Congratulations! You won!"
