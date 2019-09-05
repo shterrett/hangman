@@ -1,5 +1,6 @@
 module GuessEffect where
 
+import Data.Char (isAlpha, toLower)
 import qualified Data.Set as Set
 import Control.Effect
 import Control.Effect.State
@@ -33,10 +34,11 @@ guess s = do
         clearError = (errorMsg .~ Nothing)
 
 isChar :: Text -> Either GuessError Char
-isChar = toEither . readMaybe . T.unpack
+isChar = toEither . T.unpack
   where toEither = \case
-                     Nothing -> Left $ NotChar
-                     Just c -> Right c
+                     c:"" | isAlpha c -> Right $ toLower c
+                          | otherwise -> Left NotChar
+                     _ -> Left NotChar
 
 alreadyGuessed :: GameState -> Char -> Either GuessError Char
 alreadyGuessed g c =

@@ -48,7 +48,7 @@ gameStep = do
     write "Next Guess> "
     nextGuess <- read
     result <- guess nextGuess
-    const result <$> printError
+    result <$ printError
   where printError =
           (_errorMsg <$> get)
             >>= \case
@@ -68,4 +68,4 @@ showIncorrect GameState {..} =
   where guesses = intersperse ' ' (sort $ Set.elems _incorrectGuesses)
 
 unknown :: Text
-unknown = "⚿"
+unknown = "▮"
