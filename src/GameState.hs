@@ -12,6 +12,7 @@ data GameState =
               , _incorrectGuesses :: Set Char
               , _errorMsg :: Maybe Text
               }
+              deriving (Show)
 makeLenses ''GameState
 
 data GuessError =

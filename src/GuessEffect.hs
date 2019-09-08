@@ -14,8 +14,7 @@ guess :: (Member (State GameState) sig, Carrier sig m)
          => Text
          -> m GuessResult
 guess s = do
-    game :: GameState <- get
-    put $ clearError game
+    game :: GameState <- clearError <$> get
     case isChar s
          >>= alreadyGuessed game
          >>= checkGuess game of
